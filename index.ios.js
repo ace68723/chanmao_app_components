@@ -13,6 +13,7 @@ import {
   NavigatorIOS,
 } from 'react-native';
 import InfoPage from './intro/infoPage'
+import OrderConfirm from './order/orderConfirm'
 export default class cmInfo extends Component {
   render() {
     return (
@@ -22,8 +23,8 @@ export default class cmInfo extends Component {
           flex:1
         }}
         initialRoute={{
-          component:InfoPage,
-          title:'关于我们',
+          component: OrderConfirm ,
+          title:'订单确认',
 
         }}
         />
