@@ -12,7 +12,7 @@ import {
 
 } from 'react-native';
 import CMModal from 'react-native-modalbox';
-
+import OrderHistory from './history';
 const orderUser = {
     name:"qiao",
     phone: "647-895-0624",
@@ -25,74 +25,82 @@ export default class orderConfirm extends Component {
     super();
     this.state = {
        isOpen: false,
+       cheakHistory:false,
     }
   }
 
 
   render() {
-    console.log(this.state)
-
-    if(this.state.isOpen == true){
-
+        console.log(this.state.cheakHistory)
+      if(this.state.cheakHistory == true){
+        return(
+          <OrderHistory isCheaking={this.state.cheakHistory} />
+        )
+      }
       return(
+
         <View style={styles.container}>
-          <CMModal style={styles.modal} position={"center"} ref={"modal3"} isOpen={this.state.isOpen}>
-              <View style={{flex:1}}>
-                    <View style={styles.modalHearder}>
-                        <Text style={{fontSize:20, fontWeight:'bold'}}>定制运费</Text>
-                    </View>
-                    <View style={styles.modalContent}>
-                        <View style={{flexDirection:'row',paddingTop:20,alignItems: 'center',}}>
-                            <Image source={require('../icon/icon_name.png')} style={{width:25,height:25,marginRight:15,marginLeft:15}}/>
-                            <Text style={styles.contentFont}>{orderUser.name}</Text>
-                        </View>
-                        <View style={{flexDirection:'row',paddingTop:20,alignItems: 'center',}}>
+            <TouchableOpacity  style={styles.button}>
 
-                            <Image source={require('../icon/icon_telephone.png')} style={{width:25,height:25,marginRight:15,marginLeft:15}}/>
-                            <Text style={styles.contentFont}>{orderUser.phone}</Text>
-                        </View>
-                        <View style={{flexDirection:'row',paddingTop:20,alignItems: 'center',}}>
-                            <Image source={require('../icon/icon_total.png')} style={{width:22,height:25,marginRight:15,marginLeft:15}}/>
-                            <Text style={styles.contentFont}>{orderUser.total}</Text>
-                        </View>
-                        <View style={{flexDirection:'row',paddingTop:20,alignItems: 'center',}}>
-                            <Image source={require('../icon/icon_address.png')} style={{width:19,height:25,marginRight:15,marginLeft:15}}/>
-                            <Text style={styles.contentFont}>{orderUser.address}</Text>
-                        </View>
+                <Text style={{fontSize:20,fontWeight:'bold', color:'white',textAlign:'center'}}
+                      onPress={()=>this.setState({isOpen: !this.state.isOpen})} allowFontScaling={false}>
+                    修改
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity  style={styles.button}>
+                <Text style={{fontSize:20,fontWeight:'bold', color:'white',textAlign:'center'}}
+                     onPress={()=>this.setState({cheakHistory: true})} allowFontScaling={false}>
+                    查看
+                </Text>
+            </TouchableOpacity>
 
-                    </View>
-                    <View style={styles.modalFooter}>
-                        <View style={styles.modalButton}>
-                            <TouchableOpacity style={{flex:1,
-                                                      justifyContent:'center',
-                                                      alignItems:'center'}}
-                                              onPress={() => this.setState({isOpen: !this.state.isOpen})}>
-                              <Text style={styles.buttonFont}>取消</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.modalButton}>
-                            <TouchableOpacity style={{flex:1,
-                                                      justifyContent:'center',
-                                                      alignItems:'center'}}
-                                              onPress={() => this.setState({isOpen: !this.state.isOpen})}>
-                              <Text style={{fontSize:18,color:"#6394db"}}>确认</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-              </View>
-          </CMModal>
+            <CMModal style={styles.modal} position={"center"}  isOpen={this.state.isOpen}>
+                <View style={{flex:1}}>
+                      <View style={styles.modalHearder}>
+                          <Text style={{fontSize:20, fontWeight:'bold'}} allowFontScaling={false}>定制运费</Text>
+                      </View>
+                      <View style={styles.modalContent}>
+                          <View style={{flexDirection:'row',paddingTop:20,alignItems: 'center',}}>
+                              <Image source={require('../icon/icon_name.png')} style={{width:25,height:25,marginRight:15,marginLeft:15}}/>
+                              <Text style={styles.contentFont} allowFontScaling={false}>{orderUser.name}</Text>
+                          </View>
+                          <View style={{flexDirection:'row',paddingTop:20,alignItems: 'center',}}>
+
+                              <Image source={require('../icon/icon_telephone.png')} style={{width:25,height:25,marginRight:15,marginLeft:15}}/>
+                              <Text style={styles.contentFont} allowFontScaling={false}>{orderUser.phone}</Text>
+                          </View>
+                          <View style={{flexDirection:'row',paddingTop:20,alignItems: 'center',}}>
+                              <Image source={require('../icon/icon_total.png')} style={{width:22,height:25,marginRight:15,marginLeft:15}}/>
+                              <Text style={styles.contentFont} allowFontScaling={false}>{orderUser.total}</Text>
+                          </View>
+                          <View style={{flexDirection:'row',paddingTop:20,alignItems: 'center',}}>
+                              <Image source={require('../icon/icon_address.png')} style={{width:19,height:25,marginRight:15,marginLeft:15}}/>
+                              <Text style={styles.contentFont} allowFontScaling={false}>{orderUser.address}</Text>
+                          </View>
+
+                      </View>
+                      <View style={styles.modalFooter}>
+                          <View style={styles.modalButton}>
+                              <TouchableOpacity style={{flex:1,
+                                                        justifyContent:'center',
+                                                        alignItems:'center'}}
+                                                onPress={() => this.setState({isOpen: !this.state.isOpen})}>
+                                <Text style={styles.buttonFont} allowFontScaling={false}>取消</Text>
+                              </TouchableOpacity>
+                          </View>
+                          <View style={styles.modalButton}>
+                              <TouchableOpacity style={{flex:1,
+                                                        justifyContent:'center',
+                                                        alignItems:'center'}}
+                                                onPress={() => this.setState({isOpen: !this.state.isOpen})}>
+                                <Text style={{fontSize:18,color:"#6394db"}} allowFontScaling={false}>确认</Text>
+                              </TouchableOpacity>
+                          </View>
+                      </View>
+                </View>
+            </CMModal>
+
          </View>
-      )
-    }
-    return (
-        <View style={styles.container}>
-          <TouchableOpacity  style={styles.button}>
-              <Text style={{fontSize:20,fontWeight:'bold', color:'white',textAlign:'center'}}
-                    onPress={()=>this.setState({isOpen: !this.state.isOpen})}>
-                  修改
-              </Text>
-          </TouchableOpacity>
-        </View>
     )
   }
 }
