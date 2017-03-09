@@ -101,7 +101,7 @@ export default class orderHistory extends Component {
                           <View style={styles.modalContent}>
                               <ScrollView >
                                   <View >
-                                    {this.renderList()}
+                                    {this._renderList()}
                                   </View>
                                   <View style={styles.comment}>
                                     <View style={{marginRight:10, marginLeft:10}}>
@@ -131,7 +131,7 @@ export default class orderHistory extends Component {
 
     )
   }
-  renderList(){
+  _renderList(){
     return orderInfo.food.map((item,index)=>{
       return(
         <View style={{flex:1,flexDirection:'row',paddingBottom:13}} key={index}>
