@@ -13,6 +13,9 @@ import {
 } from 'react-native';
 import CMModal from 'react-native-modalbox';
 import OrderHistory from './history';
+import PastOrderEN from './pastOrderEN';
+import PastOrderCN from './pastOrderCN';
+import Icon from 'react-native-vector-icons';
 const orderUser = {
     name:"qiao",
     phone: "647-895-0624",
@@ -26,17 +29,30 @@ export default class orderConfirm extends Component {
     this.state = {
        isOpen: false,
        cheakHistory:false,
+       pastOrder:false,
+       pastOrderCN:false,
     }
   }
 
 
   render() {
-        console.log(this.state.cheakHistory)
+
       if(this.state.cheakHistory == true){
         return(
           <OrderHistory isCheaking={this.state.cheakHistory} />
         )
       }
+      if(this.state.pastOrder == true){
+        return(
+          <PastOrderEN isCheaking={this.state.cheakHistory} />
+        )
+      }
+      if(this.state.pastOrderCN == true){
+        return(
+          <PastOrderCN isCheaking={this.state.cheakHistory} />
+        )
+      }
+
       return(
 
         <View style={styles.container}>
@@ -53,7 +69,20 @@ export default class orderConfirm extends Component {
                     查看
                 </Text>
             </TouchableOpacity>
+            <TouchableOpacity  style={styles.button}>
 
+                <Text style={{fontSize:15,fontWeight:'bold', color:'white',textAlign:'center'}}
+                      onPress={()=>this.setState({pastOrder:true})} allowFontScaling={false}>
+                    完成订单（英）
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity  style={styles.button}>
+
+                <Text style={{fontSize:15,fontWeight:'bold', color:'white',textAlign:'center'}}
+                      onPress={()=>this.setState({pastOrderCN:true})} allowFontScaling={false}>
+                    完成订单（中）
+                </Text>
+            </TouchableOpacity>
             <CMModal style={styles.modal} position={"center"}  isOpen={this.state.isOpen}>
                 <View style={{flex:1}}>
                       <View style={styles.modalHearder}>
