@@ -6,10 +6,11 @@ import {
   View,
 } from 'react-native';
 import Category from './Category';
+import Payment from './Payment';
 export default class cmInfo extends Component {
   render() {
     return (
-      <Category />
+      <Payment />
     );
   }
 }
