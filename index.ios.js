@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import InfoPage from './intro/infoPage'
 import OrderConfirm from './order/orderConfirm'
+import IndexPage from './order/indexPage'
+import PayIndex from './payment/payIndex'
 export default class cmInfo extends Component {
   render() {
     return (
@@ -23,8 +25,8 @@ export default class cmInfo extends Component {
           flex:1
         }}
         initialRoute={{
-          component: OrderConfirm ,
-          title:'订单确认',
+          component: PayIndex,
+          title:'PAYMENT MENU',
 
         }}
         />
