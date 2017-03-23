@@ -24,65 +24,24 @@ const orderUser = {
 }
 
 export default class orderConfirm extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
+
     this.state = {
-       isOpen: false,
-       cheakHistory:false,
-       pastOrder:false,
-       pastOrderCN:false,
+       isOpen: this.props.isCheaking,
+
     }
   }
 
 
   render() {
 
-      if(this.state.cheakHistory == true){
-        return(
-          <OrderHistory isCheaking={this.state.cheakHistory} />
-        )
-      }
-      if(this.state.pastOrder == true){
-        return(
-          <PastOrderEN isCheaking={this.state.cheakHistory} />
-        )
-      }
-      if(this.state.pastOrderCN == true){
-        return(
-          <PastOrderCN isCheaking={this.state.cheakHistory} />
-        )
-      }
+
 
       return(
 
         <View style={styles.container}>
-            <TouchableOpacity  style={styles.button}>
 
-                <Text style={{fontSize:20,fontWeight:'bold', color:'white',textAlign:'center'}}
-                      onPress={()=>this.setState({isOpen: !this.state.isOpen})} allowFontScaling={false}>
-                    修改
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity  style={styles.button}>
-                <Text style={{fontSize:20,fontWeight:'bold', color:'white',textAlign:'center'}}
-                     onPress={()=>this.setState({cheakHistory: true})} allowFontScaling={false}>
-                    查看
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity  style={styles.button}>
-
-                <Text style={{fontSize:15,fontWeight:'bold', color:'white',textAlign:'center'}}
-                      onPress={()=>this.setState({pastOrder:true})} allowFontScaling={false}>
-                    完成订单（英）
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity  style={styles.button}>
-
-                <Text style={{fontSize:15,fontWeight:'bold', color:'white',textAlign:'center'}}
-                      onPress={()=>this.setState({pastOrderCN:true})} allowFontScaling={false}>
-                    完成订单（中）
-                </Text>
-            </TouchableOpacity>
             <CMModal style={styles.modal} position={"center"}  isOpen={this.state.isOpen}>
                 <View style={{flex:1}}>
                       <View style={styles.modalHearder}>
