@@ -20,7 +20,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const {height, width} = Dimensions.get('window');
 const deviceWidth = width;
 const deviceHeight = height;
-
+import Marker from './marker'
 var cols = 3;
 const years = [2016,2017,2018,2019,2020,2021,2022,2023];
 var that;
@@ -56,21 +56,29 @@ export default class CMKeyBoard extends Component {
           bounceValueCVVFontSize: new Animated.Value(20),
 
 
+
         }
 
 
     }
-    _renderMarker()
-    {
-      if (this.state.InputSelected){
-          return( <Animated.Text style={{
-                    flex:1,fontSize:22,
-                    opacity:this.state.bounceValueMarker,
-                  }}>
-                    |
-                  </Animated.Text>
-          )}
+
+    _renderNumMarker(){
+        if(this.state.isOpen){
+
+          return(<Marker/>)
+        }
+
+
     }
+    _renderCVVMarker(){
+        if(this.state.isCVVOpen){
+
+          return(<Marker/>)
+        }
+
+
+    }
+
     _showKeyboard(type){
 
         this._BlurDateKeyboard();
@@ -446,13 +454,9 @@ export default class CMKeyBoard extends Component {
                               <Image source={require('../icon/icon_creditcard.png')} style={{height:25,width:36,opacity:0.5}}/>
                             </View>
 
-                            <View style={{height:40 ,width:300,marginTop:25,marginLeft:15}} >
-                                  <TextInput
-                                     style={{flex:1,fontSize:20}}
-                                     value={this.state.text}
-                                     editable={false}
-                                  />
-                                  {this._renderMarker()}
+                            <View style={{height:40 ,width:300,marginTop:30,marginLeft:15,flexDirection:'row'}} >
+                                  <Text style={{fontSize:25,backgroundColor:'transparent'}} >{this.state.text}</Text>
+                                  {this._renderNumMarker()}
                             </View>
 
                   </View>
@@ -516,14 +520,11 @@ export default class CMKeyBoard extends Component {
                               <Animated.Text style={{
                                 opacity:this.state.opacityCVVWord,
                               }}>
-                                <View style={{height:40 ,width:100 }} >
-                                  <TextInput style={{flex:1,fontSize:25,backgroundColor:'rgba(0,0,0,0)'}}
-                                              allowFontScaling={false}
-                                              onChangeText={(text) => this.setState({text})}
-                                              placeholder="123"
-                                              value= {this.state.cvv}
-                                              editable={false}
-                                  />
+                                <View style={{height:40 ,width:100,flexDirection:'row' }} >
+                                  <Text style={{fontSize:25,backgroundColor:'transparent'}}
+                                              allowFontScaling={false}>
+                                              {this.state.cvv}</Text>
+                                    {this._renderCVVMarker()}
                                 </View>
                               </Animated.Text>
                             </View>
