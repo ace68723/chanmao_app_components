@@ -26,19 +26,22 @@ const deviceWidth = width;
 const deviceHeight = height;
 export default class cmInfo extends Component {
   render() {
-    return (
-      <NavigatorIOS
-
-        style={{
-          flex:1
-        }}
-        initialRoute={{
-          component: Catch,
-          title:'catch',
-
-        }}
-        />
-    );
+    // return (
+    //   <NavigatorIOS
+    //
+    //     style={{
+    //       flex:1
+    //     }}
+    //     initialRoute={{
+    //       component: Movein,
+    //       title:'Movein',
+    //
+    //     }}
+    //     />
+    // );
+    return(
+      <Movein />
+    )
   }
 }
 
