@@ -11,28 +11,23 @@
 
 'use strict';
 
+const crypto = require('crypto');
 const debugRead = require('debug')('RNP:TransformCache:Read');
 const fs = require('fs');
-/**
- * We get the package "for free" with "write-file-atomic". MurmurHash3 is a
- * faster hash, but non-cryptographic and insecure, that seems reasonnable for
- * this particular use case.
- */
-const imurmurhash = require('imurmurhash');
-const jsonStableStringify = require('json-stable-stringify');
 const mkdirp = require('mkdirp');
 const path = require('path');
 const rimraf = require('rimraf');
 const terminal = require('../lib/terminal');
-const toFixedHex = require('./toFixedHex');
 const writeFileAtomicSync = require('write-file-atomic').sync;
 
 const CACHE_NAME = 'react-native-packager-cache';
 
-type CacheFilePaths = {transformedCode: string, metadata: string};
 import type {Options as TransformOptions} from '../JSTransformer/worker/worker';
 import type {SourceMap} from './SourceMap';
 import type {Reporter} from './reporting';
+
+type CacheFilePaths = {transformedCode: string, metadata: string};
+export type GetTransformCacheKey = (sourceCode: string, filename: string, options: {}) => string;
 
 /**
  * If packager is running for two different directories, we don't want the
@@ -40,15 +35,15 @@ import type {Reporter} from './reporting';
  * will be, for example, installed in a different `node_modules/` folder for
  * different projects.
  */
-const getCacheDirPath = (function () {
+const getCacheDirPath = (function() {
   let dirPath;
-  return function () {
+  return function() {
     if (dirPath == null) {
       dirPath = path.join(
         require('os').tmpdir(),
-        CACHE_NAME + '-' + imurmurhash(__dirname).result().toString(16),
+        CACHE_NAME + '-' + crypto.createHash('sha1')
+          .update(__dirname).digest('base64'),
       );
-
       require('debug')('RNP:TransformCache:Dir')(
         `transform cache directory: ${dirPath}`
       );
@@ -58,10 +53,20 @@ const getCacheDirPath = (function () {
 })();
 
 function hashSourceCode(props: {
+  filePath: string,
   sourceCode: string,
-  transformCacheKey: string,
+  getTransformCacheKey: GetTransformCacheKey,
+  transformOptions: TransformOptions,
+  transformOptionsKey: string,
 }): string {
-  return imurmurhash(props.transformCacheKey).hash(props.sourceCode).result();
+  return crypto.createHash('sha1')
+    .update(props.getTransformCacheKey(
+      props.sourceCode,
+      props.filePath,
+      props.transformOptions,
+    ))
+    .update(props.sourceCode)
+    .digest('hex');
 }
 
 /**
@@ -71,12 +76,12 @@ function hashSourceCode(props: {
  */
 function getCacheFilePaths(props: {
   filePath: string,
-  transformOptions: TransformOptions,
+  transformOptionsKey: string,
 }): CacheFilePaths {
-  const hasher = imurmurhash()
-    .hash(props.filePath)
-    .hash(jsonStableStringify(props.transformOptions) || '');
-  const hash = toFixedHex(8, hasher.result());
+  const hasher = crypto.createHash('sha1')
+    .update(props.filePath)
+    .update(props.transformOptionsKey);
+  const hash = hasher.digest('hex');
   const prefix = hash.substr(0, 2);
   const fileName = `${hash.substr(2)}${path.basename(props.filePath)}`;
   const base = path.join(getCacheDirPath(), prefix, fileName);
@@ -125,8 +130,9 @@ function unlinkIfExistsSync(filePath: string) {
 function writeSync(props: {
   filePath: string,
   sourceCode: string,
-  transformCacheKey: string,
+  getTransformCacheKey: GetTransformCacheKey,
   transformOptions: TransformOptions,
+  transformOptionsKey: string,
   result: CachedResult,
 }): void {
   const cacheFilePath = getCacheFilePaths(props);
@@ -136,7 +142,7 @@ function writeSync(props: {
   unlinkIfExistsSync(cacheFilePath.metadata);
   writeFileAtomicSync(cacheFilePath.transformedCode, result.code);
   writeFileAtomicSync(cacheFilePath.metadata, JSON.stringify([
-    imurmurhash(result.code).result(),
+    crypto.createHash('sha1').update(result.code).digest('hex'),
     hashSourceCode(props),
     result.dependencies,
     result.dependencyOffsets,
@@ -234,8 +240,8 @@ const GARBAGE_COLLECTOR = new (class GarbageCollector {
 function readMetadataFileSync(
   metadataFilePath: string,
 ): ?{
-  cachedResultHash: number,
-  cachedSourceHash: number,
+  cachedResultHash: string,
+  cachedSourceHash: string,
   dependencies: Array<string>,
   dependencyOffsets: Array<number>,
   sourceMap: ?SourceMap,
@@ -261,8 +267,8 @@ function readMetadataFileSync(
     sourceMap,
   ] = metadata;
   if (
-    typeof cachedResultHash !== 'number' ||
-    typeof cachedSourceHash !== 'number' ||
+    typeof cachedResultHash !== 'string' ||
+    typeof cachedSourceHash !== 'string' ||
     !(
       Array.isArray(dependencies) &&
       dependencies.every(dep => typeof dep === 'string')
@@ -288,7 +294,8 @@ export type ReadTransformProps = {
   filePath: string,
   sourceCode: string,
   transformOptions: TransformOptions,
-  transformCacheKey: string,
+  transformOptionsKey: string,
+  getTransformCacheKey: GetTransformCacheKey,
   cacheOptions: CacheOptions,
 };
 
@@ -319,7 +326,8 @@ function readSync(props: ReadTransformProps): ?CachedResult {
       return null;
     }
     transformedCode = fs.readFileSync(cacheFilePaths.transformedCode, 'utf8');
-    if (metadata.cachedResultHash !== imurmurhash(transformedCode).result()) {
+    const codeHash = crypto.createHash('sha1').update(transformedCode).digest('hex');
+    if (metadata.cachedResultHash !== codeHash) {
       return null;
     }
   } catch (error) {
@@ -343,5 +351,5 @@ module.exports = {
     const msg = result ? 'Cache hit: ' : 'Cache miss: ';
     debugRead(msg + props.filePath);
     return result;
-  }
+  },
 };
