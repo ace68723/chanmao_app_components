@@ -37,7 +37,6 @@ export default class Movein extends Component {
   constructor(){
     super();
 
-    console.log(width)
     this.state = {
         moveAnimToBottom: new Animated.Value(-(height*0.36)),
         moveAnimToTop: new Animated.Value(-(height*0.65)),
@@ -276,7 +275,6 @@ export default class Movein extends Component {
   }
 
   render() {
-    console.log(height)
     let {BoxPan} = this.state;
     let {CMPan} = this.state;
     // let scale = this.state.BoxScale ;

@@ -30,69 +30,78 @@ export default class Movein extends Component {
         twirlBox: new Animated.Value(0),
         changePic:false,
 
+        infinite:true,
+
     }
   }
 
   componentWillMount(){
-      Animated.sequence([
-        Animated.timing(            //盒子出現 2s'
-        this.state.moveBoxToRight,
-        {
-          toValue:width*0.7+((armWidth/2)-(boxWidth*0.5)),
-          friction: 1,
-          duration:1800,
-          delay:200,
-        }),
-        Animated.timing(             //盒子旋轉 1.5s'
-        this.state.twirlBox,
-        {
-          toValue:1,
-          duration:1400,
-          delay:100,
-        }),
+      {this.Catch()}
 
-        Animated.timing(            //爪子下降 2.2s'
-        this.state.moveArm,
-        {
-          toValue: -(height*0.1-20),
-          friction: 1,
-          easing: Easing.out(Easing.poly(4)),
-          duration:2000,
-          delay:200,
-        }),
-        Animated.parallel([     //爪子升起 1.3s'
-          Animated.timing(
-          this.state.moveArm,
-          {
-            toValue: -(height+boxHeight),
-            friction: 1,
-            easing: Easing.in(Easing.poly(4)),
-            duration:1100,
-            delay:200,
-          }),
-          Animated.timing(      //盒子同時升起
-          this.state.moveBoxToTop,
-          {
-            toValue: -(height+boxHeight),
-            friction: 1,
-            easing: Easing.in(Easing.poly(4)),
-            duration:1100,
-            delay:200,
-          }),
-        ]),
+  }
+  Catch(){
+    // if(this.state.infinite){
 
-      ]).start();
-      setTimeout(()=>{      //爪子打開
-        this.setState({
-          changePic:true,
-        })
-      },4000);
-      setTimeout(()=>{      //爪子關閉
-        this.setState({
-          changePic:false,
-        })
-      },5300);
 
+          Animated.sequence([
+            Animated.timing(            //盒子出現 2s'
+            this.state.moveBoxToRight,
+            {
+              toValue:width*0.7+((armWidth/2)-(boxWidth*0.5)),
+              friction: 1,
+              duration:1800,
+              delay:200,
+            }),
+            Animated.timing(             //盒子旋轉 1.5s'
+            this.state.twirlBox,
+            {
+              toValue:1,
+              duration:1400,
+              delay:100,
+            }),
+
+            Animated.timing(            //爪子下降 2.2s'
+            this.state.moveArm,
+            {
+              toValue: -(height*0.1-20),
+              friction: 1,
+              easing: Easing.out(Easing.poly(4)),
+              duration:2000,
+              delay:200,
+            }),
+            Animated.parallel([     //爪子升起 1.3s'
+              Animated.timing(
+              this.state.moveArm,
+              {
+                toValue: -(height+boxHeight),
+                friction: 1,
+                easing: Easing.in(Easing.poly(4)),
+                duration:1100,
+                delay:200,
+              }),
+              Animated.timing(      //盒子同時升起
+              this.state.moveBoxToTop,
+              {
+                toValue: -(height+boxHeight),
+                friction: 1,
+                easing: Easing.in(Easing.poly(4)),
+                duration:1100,
+                delay:200,
+              }),
+            ]),
+
+          ]).start();
+          setTimeout(()=>{      //爪子打開
+            this.setState({
+              changePic:true,
+            })
+          },4000);
+          setTimeout(()=>{      //爪子關閉
+            this.setState({
+              changePic:false,
+            })
+          },5300);
+      //}
   }
 
   render() {

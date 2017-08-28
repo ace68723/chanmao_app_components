@@ -9,9 +9,6 @@ import {
   Animated,
   Easing,
   Dimensions,
-
-
-
 } from 'react-native';
 import InfoPage from './intro/infoPage'
 import OrderConfirm from './order/orderConfirm'
@@ -21,27 +18,32 @@ import Keyboard from './keyboard/keyboard'
 import KybInterface from './keyboard/interface'
 import Movein from './animation/movein'
 import Catch from './animation/catch'
+import Item from './dessert/itemPage/item'
+import ShopIndex from './dessert/shopPage/shopIndex'
+import Confirm from './dessert/confirmPage/confirm'
 const {height, width} = Dimensions.get('window');
 const deviceWidth = width;
 const deviceHeight = height;
 export default class cmInfo extends Component {
   render() {
-    // return (
-    //   <NavigatorIOS
-    //
-    //     style={{
-    //       flex:1
-    //     }}
-    //     initialRoute={{
-    //       component: Movein,
-    //       title:'Movein',
-    //
-    //     }}
-    //     />
-    // );
-    return(
-      <Movein />
-    )
+    return (
+      <NavigatorIOS
+
+            style={{
+              flex:1
+            }}
+            initialRoute={{
+              component: Confirm,
+              title: '确认订单',
+
+            }}
+
+      />
+    );
+    //navigationBarHidden:true,
+    // return(
+    //   <Confirm />
+    // )
   }
 }
 
